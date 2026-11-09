@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
   <style>
     :root {
       --bg-deep: #060B16;
@@ -26,18 +27,6 @@
       --amber: #F59E0B;
       --radius-lg: 20px;
       --radius-md: 14px;
-    }
-    body.light-mode {
-      --bg-deep: #F1F5F9;
-      --bg-card: rgba(255, 255, 255, 0.92);
-      --bg-card-hover: #FFFFFF;
-      --bg-glass: rgba(15, 23, 42, 0.04);
-      --border-subtle: rgba(15, 23, 42, 0.1);
-      --border-glow: rgba(13, 148, 136, 0.45);
-      --text-main: #0F172A;
-      --text-muted: #475569;
-      --teal: #0D9488;
-      --blue: #0284C7;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -86,10 +75,6 @@
       display: flex;
       flex-direction: column;
     }
-    body.light-mode .stage-viewport {
-      background: rgba(248, 250, 252, 0.88);
-      box-shadow: 0 25px 60px rgba(15, 23, 42, 0.12);
-    }
 
     /* Top Chapter Navigation Bar inside Stage */
     .top-nav {
@@ -130,7 +115,6 @@
       border-radius: 999px;
       border: 1px solid var(--border-subtle);
     }
-    body.light-mode .chapter-tabs { background: rgba(15, 23, 42, 0.06); }
     .chapter-tab {
       border: none;
       background: transparent;
@@ -161,10 +145,7 @@
       transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       box-shadow: 0 0 12px rgba(45, 212, 191, 0.6);
     }
-  </style>
-</head>
-<body>
-  <style>
+
     /* Slides & Staggered Entry Animations */
     .slides-area {
       position: relative;
@@ -249,7 +230,6 @@
       color: #34D399;
       border-color: rgba(16, 185, 129, 0.3);
     }
-    body.light-mode .pill-emerald { color: #059669; }
     .h1-hero {
       font-size: 40px;
       font-weight: 800;
@@ -264,11 +244,6 @@
     }
     .text-grad {
       background: linear-gradient(90deg, #2DD4BF, #38BDF8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    body.light-mode .text-grad {
-      background: linear-gradient(90deg, #0D9488, #0284C7);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -319,6 +294,8 @@
     }
     .slide.active .bar-fill { width: var(--w); }
   </style>
+</head>
+<body>
 
   <div class="ambient-bg"></div>
 
@@ -349,7 +326,7 @@
 
     <div class="slides-area">
       <!-- ==================== SLIDE 1: HERO ECOSYSTEM ==================== -->
-      <section class="slide active" data-notes="Добрый день! Представляю модель специализированного и юридически чистого канала сбыта дефицитных ветеринарных препаратов через экосистему Telegram. Мы объединяем информационную витрину, автоматизированного бота-консультанта и партнерскую логистику, обеспечивая 100% прослеживаемость каждой партии и высокий LTV за счет регулярных покупок.">
+      <section class="slide active">
         <div style="display:grid; grid-template-columns: 1.18fr 0.82fr; gap: 32px; align-items: center; margin: auto 0;">
           <!-- Left Column -->
           <div class="anim d-1">
@@ -453,7 +430,7 @@
         </div>
       </section>
       <!-- ==================== SLIDE 2: LEGAL & COMPLIANCE ==================== -->
-      <section class="slide" data-notes="Ключевой вопрос — как выстроена работа без нарушения законодательства. Мы разделяем информационный и операционный контуры: Telegram выступает как экспертное медиа и справочник дозировок, а бронирование и доставка выполняются по агентскому поручению через лицензированную логистическую инфраструктуру.">
+      <section class="slide">
         <div class="anim d-1" style="display:flex; justify-content:space-between; align-items:flex-end;">
           <div>
             <span class="pill"><i class="fa-solid fa-scale-balanced"></i> Архитектура безопасности</span>
@@ -528,7 +505,7 @@
       </section>
 
       <!-- ==================== SLIDE 3: 5-MIN SALES FUNNEL ==================== -->
-      <section class="slide" data-notes="Архитектура воронки продаж построена так, чтобы клиент проходил путь от первого знакомства до оплаты за 5 минут. Четыре шага: доверие в канале, автоподбор дозировки по весу в квиз-боте, фото упаковки под бронь и отправка трек-номера день в день.">
+      <section class="slide">
         <div class="anim d-1" style="display:flex; justify-content:space-between; align-items:flex-end;">
           <div>
             <span class="pill pill-blue"><i class="fa-solid fa-filter-circle-dollar"></i> Воронка продаж (Customer Journey)</span>
@@ -624,7 +601,7 @@
         </div>
       </section>
       <!-- ==================== SLIDE 4: ACQUISITION ENGINE ==================== -->
-      <section class="slide" data-notes="Четыре независимых источника трафика: посевы в породных Telegram-чатах, партнерская сеть заводчиков и ветврачей с агентской комиссией, перехват горячего поиска в Яндекс.Директ и экспертные вертикальные ролики.">
+      <section class="slide">
         <div class="anim d-1" style="display:flex; justify-content:space-between; align-items:flex-end;">
           <div>
             <span class="pill"><i class="fa-solid fa-rocket"></i> Go-To-Market стратегия</span>
@@ -692,7 +669,7 @@
         </div>
       </section>
       <!-- ==================== SLIDE 5: RETENTION & LTV ==================== -->
-      <section class="slide" data-notes="Главная прибыль создается на удержании. Действие каждой упаковки строго ограничено по времени. Наш бот сам напоминает владельцу за 7 дней до окончания курса и позволяет повторить заказ в 1 клик с нулевыми затратами на рекламу.">
+      <section class="slide">
         <div class="anim d-1" style="display:flex; justify-content:space-between; align-items:flex-end;">
           <div>
             <span class="pill pill-blue"><i class="fa-solid fa-repeat"></i> Удержание и максимизация LTV</span>
@@ -808,85 +785,7 @@
       transition: all 0.18s ease;
     }
     .dock-btn:hover { background: #0D9488; border-color: #2DD4BF; }
-    .dock-btn.active { background: #0284C7; border-color: #38BDF8; }
-    .speaker-box {
-      position: fixed;
-      bottom: 68px;
-      width: min(880px, 92vw);
-      background: rgba(10, 16, 30, 0.96);
-      border: 1px solid rgba(45, 212, 191, 0.45);
-      border-radius: 14px;
-      padding: 14px 20px;
-      color: #F8FAFC;
-      z-index: 49;
-      box-shadow: 0 18px 45px rgba(0,0,0,0.55);
-      display: none;
-    }
-    .speaker-box.open { display: block; }
-    @media print {
-      body { height: auto; width: auto; overflow: visible; background: #060B16; display: block; }
-      .stage-viewport { transform: none !important; width: 1280px; height: auto; overflow: visible; }
-      .slides-area { overflow: visible; height: auto; }
-      .slide { position: relative; height: 720px; opacity: 1 !important; pointer-events: auto !important; transform: none !important; page-break-after: always; }
-      .slide .anim { opacity: 1 !important; transform: none !important; }
-      .deck-dock, .speaker-box { display: none !important; }
-    }
-  </style>
-
-  <div class="speaker-box" id="notesDrawer">
-    <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-      <span class="mono" style="font-size:11px; color:#2DD4BF; font-weight:700;"><i class="fa-solid fa-microphone-lines"></i> РЕЧЬ СПИКЕРА</span>
-      <span class="mono" id="notesSlideLabel" style="font-size:11px; color:#94A3B8;">Слайд 1 / 5</span>
-    </div>
-    <p id="notesText" style="font-size:13px; line-height:1.5; color:#E2E8F0;"></p>
-  </div>
-
-  <nav class="deck-dock">
-    <button class="dock-btn" id="prevBtn"><i class="fa-solid fa-arrow-left"></i> Назад</button>
-    <span class="mono" id="counterLabel" style="font-size:12px; padding:0 8px;">01 / 05</span>
-    <button class="dock-btn" id="nextBtn">Далее <i class="fa-solid fa-arrow-right"></i></button>
-    <button class="dock-btn" id="notesBtn"><i class="fa-solid fa-comment-dots"></i> Спикер</button>
-    <button class="dock-btn" id="themeBtn"><i class="fa-solid fa-sun"></i> Тема</button>
-    <button class="dock-btn" onclick="window.print()"><i class="fa-solid fa-file-pdf"></i> PDF</button>
-  </nav>
-
-  <script>
-    const slides = Array.from(document.querySelectorAll('.slide'));
-    const tabs = Array.from(document.querySelectorAll('.chapter-tab'));
-    const topProgress = document.getElementById('topProgress');
-    const counterLabel = document.getElementById('counterLabel');
-    const notesDrawer = document.getElementById('notesDrawer');
-    const notesText = document.getElementById('notesText');
-    const notesSlideLabel = document.getElementById('notesSlideLabel');
-    const notesBtn = document.getElementById('notesBtn');
-    const themeBtn = document.getElementById('themeBtn');
-    const stage = document.getElementById('stage');
-    let current = 0;
-
-    function goToSlide(index) {
-      current = (index + slides.length) % slides.length;
-      slides.forEach((s, i) => s.classList.toggle('active', i === current));
-      tabs.forEach((t, i) => t.classList.toggle('active', i === current));
-      topProgress.style.width = (((current + 1) / slides.length) * 100) + '%';
-      counterLabel.textContent = String(current + 1).padStart(2, '0') + ' / 0' + slides.length;
-      notesSlideLabel.textContent = 'Слайд ' + (current + 1) + ' / ' + slides.length;
-      notesText.textContent = slides[current].getAttribute('data-notes') || '';
-    }
-
-    document.getElementById('prevBtn').addEventListener('click', () => goToSlide(current - 1));
-    document.getElementById('nextBtn').addEventListener('click', () => goToSlide(current + 1));
-    notesBtn.addEventListener('click', () => {
-      notesDrawer.classList.toggle('open');
-      notesBtn.classList.toggle('active');
-    });
-    themeBtn.addEventListener('click', () => {
-      document.body.classList.toggle('light-mode');
-    });
-
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); goToSlide(current + 1); }
-      if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); goToSlide(current - 1); }
-    });
+    .dock-btn.active { background: #0284C7; border-color: #38BDF8; });
 
     function fitStage() {
       const scale = Math.min((window.innerWidth - 40) / 1280, (window.innerHeight - 90) / 720, 1.15);
