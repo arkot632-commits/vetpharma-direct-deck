@@ -3,33 +3,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VetPharma Direct — Легитимный Telegram-канал сбыта</title>
+  <title>VetPharma Direct — Экосистема дистрибуции в Telegram</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
     :root {
-      --slate-900: #0F172A;
-      --slate-800: #1E293B;
-      --slate-700: #334155;
-      --slate-400: #94A3B8;
-      --slate-200: #E2E8F0;
-      --bg-light: #F8FAFC;
-      --teal-600: #0D9488;
-      --teal-400: #2DD4BF;
-      --teal-50: #F0FDFA;
-      --blue-600: #2563EB;
-      --blue-50: #EFF6FF;
-      --radius: 12px;
-      --shadow-sm: 0 4px 14px rgba(15, 23, 42, 0.06);
-      --shadow-lg: 0 20px 45px rgba(15, 23, 42, 0.22);
+      --bg-deep: #060B16;
+      --bg-card: rgba(15, 23, 42, 0.72);
+      --bg-card-hover: rgba(30, 41, 59, 0.88);
+      --bg-glass: rgba(255, 255, 255, 0.04);
+      --border-subtle: rgba(148, 163, 184, 0.14);
+      --border-glow: rgba(45, 212, 191, 0.45);
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --teal: #2DD4BF;
+      --teal-dark: #0D9488;
+      --blue: #38BDF8;
+      --indigo: #6366F1;
+      --emerald: #10B981;
+      --amber: #F59E0B;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+    }
+    body.light-mode {
+      --bg-deep: #F1F5F9;
+      --bg-card: rgba(255, 255, 255, 0.92);
+      --bg-card-hover: #FFFFFF;
+      --bg-glass: rgba(15, 23, 42, 0.04);
+      --border-subtle: rgba(15, 23, 42, 0.1);
+      --border-glow: rgba(13, 148, 136, 0.45);
+      --text-main: #0F172A;
+      --text-muted: #475569;
+      --teal: #0D9488;
+      --blue: #0284C7;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Manrope', sans-serif;
-      background: #090E1A;
-      color: var(--slate-900);
+      background: var(--bg-deep);
+      color: var(--text-main);
       height: 100vh;
       width: 100vw;
       overflow: hidden;
@@ -37,661 +51,823 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      user-select: none;
+      transition: background 0.35s ease, color 0.35s ease;
     }
     .mono { font-family: 'JetBrains Mono', monospace; }
-    [contenteditable="true"] {
-      outline: none;
-      border-radius: 6px;
-      transition: background 0.15s ease, box-shadow 0.15s ease;
-      user-select: text;
+
+    /* Ambient Animated Background */
+    .ambient-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle at 15% 20%, rgba(45, 212, 191, 0.14), transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(56, 189, 248, 0.14), transparent 42%),
+        radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.07), transparent 50%),
+        linear-gradient(rgba(148, 163, 184, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px, 36px 36px;
     }
-    [contenteditable="true"]:hover {
-      background: rgba(45, 212, 191, 0.08);
-    }
-    [contenteditable="true"]:focus {
-      background: rgba(45, 212, 191, 0.14);
-      box-shadow: 0 0 0 2px var(--teal-400);
-    }
-    /* Viewport Scaler */
+
+    /* 1280x720 Stage */
     .stage-viewport {
       position: relative;
+      z-index: 2;
       width: 1280px;
       height: 720px;
       transform-origin: center center;
-      box-shadow: var(--shadow-lg);
-      border-radius: 16px;
+      border-radius: 24px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(10, 16, 30, 0.65);
+      backdrop-filter: blur(24px);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.1);
       overflow: hidden;
-      background: var(--bg-light);
+      display: flex;
+      flex-direction: column;
+    }
+    body.light-mode .stage-viewport {
+      background: rgba(248, 250, 252, 0.88);
+      box-shadow: 0 25px 60px rgba(15, 23, 42, 0.12);
+    }
+
+    /* Top Chapter Navigation Bar inside Stage */
+    .top-nav {
+      height: 62px;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      background: var(--bg-glass);
+      z-index: 10;
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: -0.01em;
+    }
+    .brand-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, #0D9488, #38BDF8);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      box-shadow: 0 4px 12px rgba(45, 212, 191, 0.35);
+    }
+    .chapter-tabs {
+      display: flex;
+      gap: 6px;
+      background: rgba(15, 23, 42, 0.45);
+      padding: 4px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+    }
+    body.light-mode .chapter-tabs { background: rgba(15, 23, 42, 0.06); }
+    .chapter-tab {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: 'Manrope', sans-serif;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .chapter-tab:hover { color: var(--text-main); }
+    .chapter-tab.active {
+      background: linear-gradient(135deg, rgba(13, 148, 136, 0.9), rgba(2, 132, 199, 0.9));
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(45, 212, 191, 0.3);
+    }
+    .top-progress-line {
+      height: 3px;
+      background: rgba(148, 163, 184, 0.12);
+      width: 100%;
+    }
+    .top-progress-fill {
+      height: 100%;
+      width: 20%;
+      background: linear-gradient(90deg, #2DD4BF, #38BDF8);
+      transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 0 12px rgba(45, 212, 191, 0.6);
+    }
+  </style>
+</head>
+<body>
+  <style>
+    /* Slides & Staggered Entry Animations */
+    .slides-area {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      overflow: hidden;
     }
     .slide {
       position: absolute;
       inset: 0;
-      width: 1280px;
-      height: 720px;
-      padding: 48px 56px;
+      padding: 28px 42px 24px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       opacity: 0;
       pointer-events: none;
-      transform: translateY(12px) scale(0.99);
-      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-      overflow: hidden;
+      transform: translateY(18px) scale(0.985);
+      transition: opacity 0.42s cubic-bezier(0.16, 1, 0.3, 1), transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .slide.active {
       opacity: 1;
       pointer-events: auto;
       transform: translateY(0) scale(1);
     }
-    .slide-dark {
-      background: radial-gradient(circle at 85% 15%, rgba(13, 148, 136, 0.22), transparent 45%),
-                  radial-gradient(circle at 15% 85%, rgba(37, 99, 235, 0.18), transparent 45%),
-                  var(--slate-900);
-      color: #F8FAFC;
+    .slide .anim {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .slide-light {
-      background: var(--bg-light);
-      color: var(--slate-900);
+    .slide.active .anim { opacity: 1; transform: translateY(0); }
+    .slide.active .d-1 { transition-delay: 0.06s; }
+    .slide.active .d-2 { transition-delay: 0.14s; }
+    .slide.active .d-3 { transition-delay: 0.22s; }
+    .slide.active .d-4 { transition-delay: 0.30s; }
+
+    /* Bento Cards & Micro-interactions */
+    .bento {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px 22px;
+      transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
+      position: relative;
+      overflow: hidden;
     }
-    /* Common Slide Header & Footer */
-    .slide-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--slate-200);
-      padding-bottom: 16px;
+    .bento:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-glow);
+      background: var(--bg-card-hover);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
     }
-    .slide-dark .slide-top { border-bottom-color: rgba(148, 163, 184, 0.2); }
-    .badge {
+    .bento-glow::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), var(--blue));
+    }
+
+    /* Typography & Badges */
+    .pill {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 6px 14px;
+      gap: 6px;
+      padding: 5px 12px;
       border-radius: 999px;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
       text-transform: uppercase;
+      background: rgba(45, 212, 191, 0.12);
+      color: var(--teal);
+      border: 1px solid rgba(45, 212, 191, 0.28);
     }
-    .badge-teal { background: rgba(13, 148, 136, 0.14); color: var(--teal-600); border: 1px solid rgba(13, 148, 136, 0.3); }
-    .slide-dark .badge-teal { background: rgba(45, 212, 191, 0.12); color: var(--teal-400); border-color: rgba(45, 212, 191, 0.3); }
-    .badge-blue { background: var(--blue-50); color: var(--blue-600); border: 1px solid rgba(37, 99, 235, 0.25); }
-    .card {
-      background: #FFFFFF;
-      border: 1px solid var(--slate-200);
-      border-radius: var(--radius);
-      padding: 22px 24px;
-      box-shadow: var(--shadow-sm);
+    .pill-blue {
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--blue);
+      border-color: rgba(56, 189, 248, 0.28);
     }
-    .slide-dark .card {
-      background: rgba(30, 41, 59, 0.85);
-      border-color: rgba(148, 163, 184, 0.18);
-      color: #F8FAFC;
+    .pill-emerald {
+      background: rgba(16, 185, 129, 0.14);
+      color: #34D399;
+      border-color: rgba(16, 185, 129, 0.3);
     }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-    .slide-title { font-size: 32px; font-weight: 800; line-height: 1.18; letter-spacing: -0.02em; }
-    .slide-subtitle { font-size: 15px; color: #475569; margin-top: 6px; font-weight: 500; }
-    .slide-dark .slide-subtitle { color: var(--slate-400); }
-    .kpi-pill {
+    body.light-mode .pill-emerald { color: #059669; }
+    .h1-hero {
+      font-size: 40px;
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+    }
+    .h2-slide {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+    .text-grad {
+      background: linear-gradient(90deg, #2DD4BF, #38BDF8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    body.light-mode .text-grad {
+      background: linear-gradient(90deg, #0D9488, #0284C7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .big-num {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 6px;
-      background: var(--teal-50);
-      color: var(--teal-600);
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.1;
     }
-    .slide-dark .kpi-pill { background: rgba(45, 212, 191, 0.15); color: var(--teal-400); }
-    .slide-footer {
-      display: flex;
+    .icon-ring {
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      display: inline-flex;
       align-items: center;
-      justify-content: space-between;
-      font-size: 12px;
-      color: var(--slate-400);
-      border-top: 1px solid var(--slate-200);
-      padding-top: 12px;
+      justify-content: center;
+      font-size: 17px;
+      background: linear-gradient(135deg, rgba(45,212,191,0.18), rgba(56,189,248,0.12));
+      color: var(--teal);
+      border: 1px solid rgba(45,212,191,0.25);
+      flex-shrink: 0;
     }
-    .slide-dark .slide-footer { border-top-color: rgba(148, 163, 184, 0.16); }
+    [contenteditable="true"] {
+      outline: none;
+      border-radius: 6px;
+      transition: box-shadow 0.15s ease, background 0.15s ease;
+    }
+    [contenteditable="true"]:focus {
+      background: rgba(45, 212, 191, 0.12);
+      box-shadow: 0 0 0 2px var(--teal);
+    }
+
+    /* Animated Progress Bars */
+    .bar-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(148, 163, 184, 0.15);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #0D9488, #2DD4BF, #38BDF8);
+      width: 0;
+      transition: width 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.25s;
+    }
+    .slide.active .bar-fill { width: var(--w); }
   </style>
-</head>
-<body>
+
+  <div class="ambient-bg"></div>
+
+  <div class="stage-viewport" id="stage">
+    <!-- TOP BAR -->
+    <header class="top-nav">
+      <div class="brand-logo">
+        <div class="brand-badge"><i class="fa-solid fa-shield-dog"></i></div>
+        <div>
+          <span contenteditable="true">VetPharma Direct</span>
+          <span class="mono" style="font-size:11px; color:var(--teal); margin-left:8px;">TELEGRAM DISTRIBUTION</span>
+        </div>
+      </div>
+
+      <div class="chapter-tabs" id="chapterTabs">
+        <button class="chapter-tab active" onclick="goToSlide(0)">01. Экосистема</button>
+        <button class="chapter-tab" onclick="goToSlide(1)">02. Легитимность</button>
+        <button class="chapter-tab" onclick="goToSlide(2)">03. Воронка 5 мин</button>
+        <button class="chapter-tab" onclick="goToSlide(3)">04. Трафик</button>
+        <button class="chapter-tab" onclick="goToSlide(4)">05. Удержание и LTV</button>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span class="pill pill-emerald" contenteditable="true"><i class="fa-solid fa-circle-check"></i> 100% Legal Model</span>
+      </div>
+    </header>
+    <div class="top-progress-line"><div class="top-progress-fill" id="topProgress"></div></div>
+
+    <div class="slides-area">
+      <!-- ==================== SLIDE 1: HERO ECOSYSTEM ==================== -->
+      <section class="slide active" data-notes="Добрый день! Представляю модель специализированного и юридически чистого канала сбыта дефицитных ветеринарных препаратов через экосистему Telegram. Мы объединяем информационную витрину, автоматизированного бота-консультанта и партнерскую логистику, обеспечивая 100% прослеживаемость каждой партии и высокий LTV за счет регулярных покупок.">
+        <div style="display:grid; grid-template-columns: 1.18fr 0.82fr; gap: 32px; align-items: center; margin: auto 0;">
+          <!-- Left Column -->
+          <div class="anim d-1">
+            <div style="display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap;">
+              <span class="pill"><i class="fa-brands fa-telegram"></i> B2C &amp; B2B2C E-Commerce</span>
+              <span class="pill pill-blue"><i class="fa-solid fa-barcode"></i> Batch-Verified Originals</span>
+            </div>
+            <h1 class="h1-hero" style="margin-bottom:16px;" contenteditable="true">
+              Легитимный канал сбыта дефицитной ветфармы в <span class="text-grad">Telegram</span>
+            </h1>
+            <p style="font-size:15.5px; color:var(--text-muted); line-height:1.55; margin-bottom:22px;" contenteditable="true">
+              Прямая реализация востребованных оригинальных препаратов владельцам животных и заводчикам через связку <strong>Экспертный канал + Квиз-бот + Партнерская доставка</strong> без комиссий и блокировок маркетплейсов.
+            </p>
+
+            <!-- Flagship SKU Strip -->
+            <div class="bento anim d-2" style="padding:14px 18px; margin-bottom:18px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <span style="font-size:12px; font-weight:700; text-transform:uppercase; color:var(--text-muted);" contenteditable="true">Флагманская матрица неэластичного спроса</span>
+                <span class="mono" style="font-size:11.5px; color:var(--teal); font-weight:700;" contenteditable="true">TOP-5 ПОЗИЦИЙ</span>
+              </div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <span class="pill" contenteditable="true">🐾 Бравекто</span>
+                <span class="pill" contenteditable="true">🐾 Симпарика</span>
+                <span class="pill pill-blue" contenteditable="true">💊 Апоквел</span>
+                <span class="pill pill-blue" contenteditable="true">💊 Антепсин</span>
+                <span class="pill pill-blue" contenteditable="true">🩺 Ализин</span>
+              </div>
+            </div>
+
+            <!-- 3 Key Metrics Bento -->
+            <div class="anim d-3" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px;">
+              <div class="bento bento-glow" style="padding:14px 16px;">
+                <div class="big-num text-grad" contenteditable="true">0%</div>
+                <div style="font-size:12.5px; font-weight:700; margin-top:4px;" contenteditable="true">Комиссий площадок</div>
+                <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;" contenteditable="true">Против 25–30% на маркетплейсах</div>
+              </div>
+              <div class="bento bento-glow" style="padding:14px 16px;">
+                <div class="big-num" style="color:var(--blue);" contenteditable="true">100%</div>
+                <div style="font-size:12.5px; font-weight:700; margin-top:4px;" contenteditable="true">Контроль серии</div>
+                <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;" contenteditable="true">Фото батч-кода до отправки</div>
+              </div>
+              <div class="bento bento-glow" style="padding:14px 16px;">
+                <div class="big-num text-grad" contenteditable="true">x3.5</div>
+                <div style="font-size:12.5px; font-weight:700; margin-top:4px;" contenteditable="true">Рост LTV клиента</div>
+                <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;" contenteditable="true">Авто-напоминания по циклу</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Interactive Telegram Bot Simulator -->
+          <div class="bento anim d-2" style="padding:22px; border-radius:22px; border-color:rgba(45,212,191,0.35); background:linear-gradient(165deg, rgba(15,23,42,0.92), rgba(9,14,28,0.96)); color:#F8FAFC; box-shadow:0 24px 50px rgba(0,0,0,0.45);">
+            <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:14px; border-bottom:1px solid rgba(148,163,184,0.15);">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <div style="width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg,#0D9488,#38BDF8); display:flex; align-items:center; justify-content:center; font-size:18px;">
+                  <i class="fa-brands fa-telegram"></i>
+                </div>
+                <div>
+                  <div style="font-weight:800; font-size:14px;" contenteditable="true">VetPharma Direct Bot</div>
+                  <div style="font-size:11.5px; color:#2DD4BF;" contenteditable="true">● онлайн • бот-каталог и верификация</div>
+                </div>
+              </div>
+              <span class="mono" style="font-size:11px; padding:4px 8px; background:rgba(45,212,191,0.15); color:#2DD4BF; border-radius:6px;">LIVE DEMO</span>
+            </div>
+
+            <!-- Chat Messages -->
+            <div style="display:flex; flex-direction:column; gap:10px; margin:16px 0;">
+              <div style="background:rgba(255,255,255,0.06); border-radius:12px 12px 12px 4px; padding:12px 14px; font-size:12.5px; line-height:1.45;">
+                <div style="color:#38BDF8; font-weight:700; font-size:11.5px; margin-bottom:4px;">Шаг 1. Подбор дозировки по весу</div>
+                <span contenteditable="true">Выбрана категория: <strong>Собака 20–40 кг</strong>. В наличии оригинальный <strong>Бравекто (MSD Animal Health)</strong>, серия <code class="mono" style="color:#2DD4BF;">#BV-2027EU</code>, годен до 09/2027.</span>
+              </div>
+
+              <div style="background:rgba(45,212,191,0.12); border:1px solid rgba(45,212,191,0.3); border-radius:12px 12px 4px 12px; padding:12px 14px; font-size:12.5px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                  <span style="color:#2DD4BF; font-weight:700; font-size:11.5px;"><i class="fa-solid fa-camera"></i> Паспорт партии прикреплен</span>
+                  <span class="mono" style="font-size:11px; color:#94A3B8;">Склад РФ • Темп. +18°C</span>
+                </div>
+                <div style="font-size:12px; color:#E2E8F0;" contenteditable="true">Индивидуальное фото вашей упаковки с голограммой отправляется в чат до оплаты.</div>
+              </div>
+
+              <!-- Interactive Bot Inline Keyboard -->
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:4px;">
+                <div onclick="goToSlide(2)" style="cursor:pointer; background:rgba(56,189,248,0.18); border:1px solid rgba(56,189,248,0.35); padding:9px; border-radius:9px; text-align:center; font-size:12px; font-weight:700; color:#38BDF8;">
+                  📦 Смотреть воронку →
+                </div>
+                <div onclick="goToSlide(4)" style="cursor:pointer; background:rgba(45,212,191,0.18); border:1px solid rgba(45,212,191,0.35); padding:9px; border-radius:9px; text-align:center; font-size:12px; font-weight:700; color:#2DD4BF;">
+                  🔔 Как работает LTV →
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; font-size:11.5px; color:#94A3B8; padding-top:10px; border-top:1px solid rgba(148,163,184,0.15);">
+              <span contenteditable="true"><i class="fa-solid fa-bolt" style="color:#2DD4BF;"></i> Отправка СДЭК в день заказа</span>
+              <span class="mono" contenteditable="true">NPS 94%</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted); border-top:1px solid var(--border-subtle); padding-top:10px;">
+          <span contenteditable="true">VetPharma Direct • Любой текст на слайдах редактируется по клику</span>
+          <span class="mono">СЛАЙД 01 / 05</span>
+        </div>
+      </section>
+      <!-- ==================== SLIDE 2: LEGAL & COMPLIANCE ==================== -->
+      <section class="slide" data-notes="Ключевой вопрос — как выстроена работа без нарушения законодательства. Мы разделяем информационный и операционный контуры: Telegram выступает как экспертное медиа и справочник дозировок, а бронирование и доставка выполняются по агентскому поручению через лицензированную логистическую инфраструктуру.">
+        <div class="anim d-1" style="display:flex; justify-content:space-between; align-items:flex-end;">
+          <div>
+            <span class="pill"><i class="fa-solid fa-scale-balanced"></i> Архитектура безопасности</span>
+            <h2 class="h2-slide" style="margin-top:6px;" contenteditable="true">Три контура легитимности и защиты от контрафакта</h2>
+          </div>
+          <span class="mono" style="font-size:12px; color:var(--teal);" contenteditable="true">ZERO MARKETPLACE RISK</span>
+        </div>
+
+        <!-- 3 Contours Cards -->
+        <div class="anim d-2" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; margin: 14px 0;">
+          <div class="bento bento-glow">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <div class="icon-ring"><i class="fa-solid fa-newspaper"></i></div>
+              <span class="mono" style="font-size:11.5px; color:var(--teal); font-weight:700;">КОНТУР 01</span>
+            </div>
+            <h3 style="font-size:17px; font-weight:800; margin-bottom:8px;" contenteditable="true">Экспертно-справочная витрина</h3>
+            <p style="font-size:13px; color:var(--text-muted); line-height:1.5; margin-bottom:12px;" contenteditable="true">
+              Канал работает в формате тематического медиа для владельцев собак: разбор оригинальной маркировки, таблиц дозировок по весу и условий хранения.
+            </p>
+            <div class="pill pill-emerald" style="font-size:11px; text-transform:none;" contenteditable="true">✓ Без нарушений ФЗ «О рекламе»</div>
+          </div>
+
+          <div class="bento bento-glow">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <div class="icon-ring" style="color:var(--blue);"><i class="fa-solid fa-qrcode"></i></div>
+              <span class="mono" style="font-size:11.5px; color:var(--blue); font-weight:700;">КОНТУР 02</span>
+            </div>
+            <h3 style="font-size:17px; font-weight:800; margin-bottom:8px;" contenteditable="true">Прозрачный паспорт партии</h3>
+            <p style="font-size:13px; color:var(--text-muted); line-height:1.5; margin-bottom:12px;" contenteditable="true">
+              Публичная демонстрация заводских батч-кодов, сроков годности и целостности блистеров. Покупатель получает фото своей упаковки до отправки.
+            </p>
+            <div class="pill pill-blue" style="font-size:11px; text-transform:none;" contenteditable="true">✓ 100% защита от серых подделок</div>
+          </div>
+
+          <div class="bento bento-glow">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <div class="icon-ring"><i class="fa-solid fa-truck-ramp-box"></i></div>
+              <span class="mono" style="font-size:11.5px; color:var(--teal); font-weight:700;">КОНТУР 03</span>
+            </div>
+            <h3 style="font-size:17px; font-weight:800; margin-bottom:8px;" contenteditable="true">Агентское бронирование</h3>
+            <p style="font-size:13px; color:var(--text-muted); line-height:1.5; margin-bottom:12px;" contenteditable="true">
+              Бот оформляет информационную бронь и курьерское поручение через партнерскую логистику (СДЭК / Боксберри) с термоконтролем на складе.
+            </p>
+            <div class="pill pill-emerald" style="font-size:11px; text-transform:none;" contenteditable="true">✓ Прозрачная цепочка отгрузки</div>
+          </div>
+        </div>
+
+        <!-- Visual Comparison Strip: Telegram vs Marketplaces -->
+        <div class="bento anim d-3" style="padding:16px 22px; display:grid; grid-template-columns: 1.1fr 1fr 1fr 1fr; gap:16px; align-items:center;">
+          <div>
+            <div style="font-size:12px; color:var(--teal); font-weight:800; text-transform:uppercase;" contenteditable="true">Почему Telegram-экосистема?</div>
+            <div style="font-size:15px; font-weight:800; margin-top:2px;" contenteditable="true">Преимущество перед маркетплейсами</div>
+          </div>
+          <div style="border-left:1px solid var(--border-subtle); padding-left:14px;">
+            <div style="font-size:11.5px; color:var(--text-muted);" contenteditable="true">Комиссия с оборота</div>
+            <div style="font-size:14px; font-weight:800; margin-top:2px;" contenteditable="true"><span style="color:var(--teal);">0% в ТГ</span> vs 25–30% на МП</div>
+          </div>
+          <div style="border-left:1px solid var(--border-subtle); padding-left:14px;">
+            <div style="font-size:11.5px; color:var(--text-muted);" contenteditable="true">Риск блокировки витрины</div>
+            <div style="font-size:14px; font-weight:800; margin-top:2px;" contenteditable="true"><span style="color:var(--teal);">Исключен</span> (прямая база)</div>
+          </div>
+          <div style="border-left:1px solid var(--border-subtle); padding-left:14px;">
+            <div style="font-size:11.5px; color:var(--text-muted);" contenteditable="true">Повторная продажа</div>
+            <div style="font-size:14px; font-weight:800; margin-top:2px;" contenteditable="true"><span style="color:var(--teal);">Бесплатно</span> через пуш бота</div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted); border-top:1px solid var(--border-subtle); padding-top:10px;">
+          <span contenteditable="true">VetPharma Direct • Юридическая чистота и защита репутации</span>
+          <span class="mono">СЛАЙД 02 / 05</span>
+        </div>
+      </section>
+
+      <!-- ==================== SLIDE 3: 5-MIN SALES FUNNEL ==================== -->
+      <section class="slide" data-notes="Архитектура воронки продаж построена так, чтобы клиент проходил путь от первого знакомства до оплаты за 5 минут. Четыре шага: доверие в канале, автоподбор дозировки по весу в квиз-боте, фото упаковки под бронь и отправка трек-номера день в день.">
+        <div class="anim d-1" style="display:flex; justify-content:space-between; align-items:flex-end;">
+          <div>
+            <span class="pill pill-blue"><i class="fa-solid fa-filter-circle-dollar"></i> Воронка продаж (Customer Journey)</span>
+            <h2 class="h2-slide" style="margin-top:6px;" contenteditable="true">От первого касания до трек-номера СДЭК за 5 минут</h2>
+          </div>
+          <span class="pill pill-emerald" contenteditable="true">Конверсия из бота в оплату: 22–28%</span>
+        </div>
+
+        <!-- 4 Funnel Steps with Animated Bars -->
+        <div class="anim d-2" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:14px; margin: 12px 0;">
+          <div class="bento bento-glow">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <span class="mono" style="font-size:12px; font-weight:700; color:var(--blue);">01 // ДОВЕРИЕ</span>
+              <i class="fa-brands fa-telegram" style="color:var(--blue); font-size:18px;"></i>
+            </div>
+            <h3 style="font-size:16px; font-weight:800; margin-bottom:6px;" contenteditable="true">Экспертный канал</h3>
+            <p style="font-size:12.5px; color:var(--text-muted); line-height:1.45; margin-bottom:12px;" contenteditable="true">
+              Видеообзор свежей партии, разбор голограмм и реальные отзывы заводчиков снимают страх подделки.
+            </p>
+            <div style="display:flex; justify-content:space-between; font-size:11.5px; font-weight:700;">
+              <span>Переход в бота</span><span class="mono" style="color:var(--teal);" contenteditable="true">42%</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill" style="--w: 85%;"></div></div>
+          </div>
+
+          <div class="bento bento-glow">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <span class="mono" style="font-size:12px; font-weight:700; color:var(--teal);">02 // ПОДБОР</span>
+              <i class="fa-solid fa-weight-scale" style="color:var(--teal); font-size:18px;"></i>
+            </div>
+            <h3 style="font-size:16px; font-weight:800; margin-bottom:6px;" contenteditable="true">Квиз-бот по весу</h3>
+            <p style="font-size:12.5px; color:var(--text-muted); line-height:1.45; margin-bottom:12px;" contenteditable="true">
+              Клиент выбирает вес питомца в 2 клика — бот мгновенно выдает точную дозировку, цену и остаток на складе.
+            </p>
+            <div style="display:flex; justify-content:space-between; font-size:11.5px; font-weight:700;">
+              <span>Оформление брони</span><span class="mono" style="color:var(--teal);" contenteditable="true">34%</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill" style="--w: 68%;"></div></div>
+          </div>
+
+          <div class="bento bento-glow">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <span class="mono" style="font-size:12px; font-weight:700; color:var(--blue);">03 // ВЕРИФИКАЦИЯ</span>
+              <i class="fa-solid fa-camera-retro" style="color:var(--blue); font-size:18px;"></i>
+            </div>
+            <h3 style="font-size:16px; font-weight:800; margin-bottom:6px;" contenteditable="true">Фото серии + Оплата</h3>
+            <p style="font-size:12.5px; color:var(--text-muted); line-height:1.45; margin-bottom:12px;" contenteditable="true">
+              Отправка фото конкретной упаковки с батч-кодом в чат клиента, консультация по курсу и быстрая оплата.
+            </p>
+            <div style="display:flex; justify-content:space-between; font-size:11.5px; font-weight:700;">
+              <span>Конверсия в оплату</span><span class="mono" style="color:var(--teal);" contenteditable="true">72%</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill" style="--w: 72%;"></div></div>
+          </div>
+
+          <div class="bento bento-glow">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <span class="mono" style="font-size:12px; font-weight:700; color:var(--teal);">04 // ДОСТАВКА</span>
+              <i class="fa-solid fa-box-open" style="color:var(--teal); font-size:18px;"></i>
+            </div>
+            <h3 style="font-size:16px; font-weight:800; margin-bottom:6px;" contenteditable="true">Отгрузка и таймер</h3>
+            <p style="font-size:12.5px; color:var(--text-muted); line-height:1.45; margin-bottom:12px;" contenteditable="true">
+              Отправка день в день со склада РФ, авто-выдача трек-номера СДЭК и постановка в календарь следующего приема.
+            </p>
+            <div style="display:flex; justify-content:space-between; font-size:11.5px; font-weight:700;">
+              <span>Повторный заказ</span><span class="mono" style="color:var(--teal);" contenteditable="true">68%</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill" style="--w: 90%;"></div></div>
+          </div>
+        </div>
+
+        <!-- Product Matrix Split -->
+        <div class="anim d-3" style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div class="bento" style="padding:14px 18px; display:flex; align-items:center; gap:14px;">
+            <div class="icon-ring"><i class="fa-solid fa-fire-flame-curved"></i></div>
+            <div>
+              <div style="font-size:13.5px; font-weight:800;" contenteditable="true">Локомотивы входа: <span style="color:var(--teal);">Бравекто и Симпарика</span></div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:2px;" contenteditable="true">Массовый понятный спрос, быстрый первый заказ и формирование доверия к сервису.</div>
+            </div>
+          </div>
+          <div class="bento" style="padding:14px 18px; display:flex; align-items:center; gap:14px;">
+            <div class="icon-ring" style="color:var(--blue);"><i class="fa-solid fa-Notes-medical fa-kit-medical"></i></div>
+            <div>
+              <div style="font-size:13.5px; font-weight:800;" contenteditable="true">Высокая маржа вне сезона: <span style="color:var(--blue);">Апоквел, Антепсин, Ализин</span></div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:2px;" contenteditable="true">Пожизненная терапия аллергиков и профессиональные закупки заводчиков и ветклиник.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted); border-top:1px solid var(--border-subtle); padding-top:10px;">
+          <span contenteditable="true">VetPharma Direct • Автоматизированная воронка без потерь лидов</span>
+          <span class="mono">СЛАЙД 03 / 05</span>
+        </div>
+      </section>
+      <!-- ==================== SLIDE 4: ACQUISITION ENGINE ==================== -->
+      <section class="slide" data-notes="Четыре независимых источника трафика: посевы в породных Telegram-чатах, партнерская сеть заводчиков и ветврачей с агентской комиссией, перехват горячего поиска в Яндекс.Директ и экспертные вертикальные ролики.">
+        <div class="anim d-1" style="display:flex; justify-content:space-between; align-items:flex-end;">
+          <div>
+            <span class="pill"><i class="fa-solid fa-rocket"></i> Go-To-Market стратегия</span>
+            <h2 class="h2-slide" style="margin-top:6px;" contenteditable="true">4 канала привлечения целевых покупателей</h2>
+          </div>
+          <span class="pill pill-emerald" contenteditable="true">Окупаемость CAC с 1-го заказа</span>
+        </div>
+
+        <div class="anim d-2" style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin: 12px 0;">
+          <div class="bento bento-glow">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <h3 style="font-size:16px; font-weight:800;" contenteditable="true"><i class="fa-brands fa-telegram" style="color:var(--teal); margin-right:8px;"></i>1. Породные ТГ-чаты и каналы</h3>
+              <span class="mono" style="font-size:12px; color:var(--teal); font-weight:700;" contenteditable="true">35% трафика</span>
+            </div>
+            <p style="font-size:12.5px; color:var(--text-muted); line-height:1.45;" contenteditable="true">
+              Нативные посевы в сообществах владельцев конкретных пород (корги, бульдоги, лабрадоры) и блогах доказательных ветврачей.
+            </p>
+            <div class="bar-track"><div class="bar-fill" style="--w: 80%;"></div></div>
+          </div>
+
+          <div class="bento bento-glow">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <h3 style="font-size:16px; font-weight:800;" contenteditable="true"><i class="fa-solid fa-handshake-angle" style="color:var(--blue); margin-right:8px;"></i>2. Партнерская сеть B2B2C</h3>
+              <span class="mono" style="font-size:12px; color:var(--blue); font-weight:700;" contenteditable="true">30% трафика</span>
+            </div>
+            <p style="font-size:12.5px; color:var(--text-muted); line-height:1.45;" contenteditable="true">
+              Персональные промокоды в боте для заводчиков, питомников, кинологов и грумеров с выплатой [5–10]% за рекомендацию.
+            </p>
+            <div class="bar-track"><div class="bar-fill" style="--w: 70%;"></div></div>
+          </div>
+
+          <div class="bento bento-glow">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <h3 style="font-size:16px; font-weight:800;" contenteditable="true"><i class="fa-solid fa-magnifying-glass-chart" style="color:var(--blue); margin-right:8px;"></i>3. Горячий поиск (Яндекс.Директ)</h3>
+              <span class="mono" style="font-size:12px; color:var(--blue); font-weight:700;" contenteditable="true">20% трафика</span>
+            </div>
+            <p style="font-size:12.5px; color:var(--text-muted); line-height:1.45;" contenteditable="true">
+              Перехват целевых запросов по названиям препаратов и дозировкам с посадкой прямо в квиз-бота проверки наличия.
+            </p>
+            <div class="bar-track"><div class="bar-fill" style="--w: 55%;"></div></div>
+          </div>
+
+          <div class="bento bento-glow">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <h3 style="font-size:16px; font-weight:800;" contenteditable="true"><i class="fa-solid fa-video" style="color:var(--teal); margin-right:8px;"></i>4. Экспертные Reels / Shorts</h3>
+              <span class="mono" style="font-size:12px; color:var(--teal); font-weight:700;" contenteditable="true">15% трафика</span>
+            </div>
+            <p style="font-size:12.5px; color:var(--text-muted); line-height:1.45;" contenteditable="true">
+              Короткие разборы «Оригинал против подделки» генерируют бесплатный вирусный охват и переходы в Telegram.
+            </p>
+            <div class="bar-track"><div class="bar-fill" style="--w: 45%;"></div></div>
+          </div>
+        </div>
+
+        <div class="bento anim d-3" style="padding:14px 20px; display:flex; justify-content:space-between; align-items:center;">
+          <div style="font-size:13.5px; font-weight:700;" contenteditable="true">
+            Юнит-экономика входа: CAC платящего клиента <span class="mono" style="color:var(--teal);">[600–950] ₽</span> при среднем чеке <span class="mono" style="color:var(--blue);">[4 500–7 200] ₽</span>
+          </div>
+          <span class="pill">ROMI 1-го месяца &gt; 180%</span>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted); border-top:1px solid var(--border-subtle); padding-top:10px;">
+          <span contenteditable="true">VetPharma Direct • Диверсифицированный маркетинг</span>
+          <span class="mono">СЛАЙД 04 / 05</span>
+        </div>
+      </section>
+      <!-- ==================== SLIDE 5: RETENTION & LTV ==================== -->
+      <section class="slide" data-notes="Главная прибыль создается на удержании. Действие каждой упаковки строго ограничено по времени. Наш бот сам напоминает владельцу за 7 дней до окончания курса и позволяет повторить заказ в 1 клик с нулевыми затратами на рекламу.">
+        <div class="anim d-1" style="display:flex; justify-content:space-between; align-items:flex-end;">
+          <div>
+            <span class="pill pill-blue"><i class="fa-solid fa-repeat"></i> Удержание и максимизация LTV</span>
+            <h2 class="h2-slide" style="margin-top:6px;" contenteditable="true">Автоворонка повторных покупок с CAC = 0 ₽</h2>
+          </div>
+          <span class="pill pill-emerald" contenteditable="true">68% выручки — повторная база</span>
+        </div>
+
+        <div class="anim d-2" style="display:grid; grid-template-columns:1.05fr 0.95fr; gap:20px; margin: 12px 0; align-items:stretch;">
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div class="bento bento-glow" style="padding:15px 18px;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                <h3 style="font-size:15px; font-weight:800;" contenteditable="true"><i class="fa-solid fa-bell" style="color:var(--teal); margin-right:8px;"></i>Триггер-календарь приема в боте</h3>
+                <span class="mono" style="font-size:11.5px; color:var(--teal);">CAC = 0 ₽</span>
+              </div>
+              <p style="font-size:12.5px; color:var(--text-muted); line-height:1.45;" contenteditable="true">
+                Бот считает дни защиты (28 дней Симпарика / 80 дней Бравекто / 25 дней Апоквел) и присылает персональный пуш за неделю до окончания курса.
+              </p>
+            </div>
+
+            <div class="bento bento-glow" style="padding:15px 18px;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                <h3 style="font-size:15px; font-weight:800;" contenteditable="true"><i class="fa-solid fa-bolt" style="color:var(--blue); margin-right:8px;"></i>Повтор заказа в 1 клик (One-Click)</h3>
+                <span class="mono" style="font-size:11.5px; color:var(--blue);">CR 60%+</span>
+              </div>
+              <p style="font-size:12.5px; color:var(--text-muted); line-height:1.45;" contenteditable="true">
+                Вес питомца и адрес любимого ПВЗ СДЭК уже сохранены в профиле — клиент подтверждает отправку одной кнопкой прямо в чате.
+              </p>
+            </div>
+
+            <div class="bento bento-glow" style="padding:15px 18px;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                <h3 style="font-size:15px; font-weight:800;" contenteditable="true"><i class="fa-solid fa-crown" style="color:var(--teal); margin-right:8px;"></i>Клуб лояльности и B2B-подписка</h3>
+                <span class="mono" style="font-size:11.5px; color:var(--teal);">LTV x3.5</span>
+              </div>
+              <p style="font-size:12.5px; color:var(--text-muted); line-height:1.45;" contenteditable="true">
+                Бонусный кэшбэк на следующую покупку, ранний резерв дефицитных дозировок и мелкооптовый прайс для питомников.
+              </p>
+            </div>
+          </div>
+
+          <!-- Right Column: Push Simulator + LTV KPIs -->
+          <div class="bento" style="display:flex; flex-direction:column; justify-content:space-between; background:linear-gradient(160deg, rgba(15,23,42,0.92), rgba(9,14,28,0.96)); color:#F8FAFC; border-color:rgba(45,212,191,0.35);">
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <span class="pill"><i class="fa-brands fa-telegram"></i> Push-уведомление бота</span>
+                <span class="mono" style="font-size:11px; color:#94A3B8;">День 78 после заказа</span>
+              </div>
+              <div style="background:rgba(255,255,255,0.06); border-left:3px solid #2DD4BF; border-radius:10px; padding:12px 14px;">
+                <p style="font-size:12.5px; color:#E2E8F0; line-height:1.45;" contenteditable="true">
+                  «Через 6 дней заканчивается действие <strong>Бравекто (20–40 кг)</strong>. Отправить свежую упаковку (до 09/2027) на ваш прежний ПВЗ СДЭК со скидкой 5%?»
+                </p>
+                <div style="display:flex; gap:8px; margin-top:10px;">
+                  <span class="pill" style="text-transform:none;">✅ Повторить в 1 клик</span>
+                  <span class="pill pill-blue" style="text-transform:none;">Сменить дозировку</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-top:14px;">
+              <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:10px; text-align:center;">
+                <div class="big-num" style="font-size:20px; color:#2DD4BF;" contenteditable="true">[3–5] раз</div>
+                <div style="font-size:11px; color:#94A3B8; margin-top:2px;">Покупок в год</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:10px; text-align:center;">
+                <div class="big-num" style="font-size:20px; color:#38BDF8;" contenteditable="true">[22 000]+ ₽</div>
+                <div style="font-size:11px; color:#94A3B8; margin-top:2px;">Годовой LTV</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:10px; text-align:center;">
+                <div class="big-num" style="font-size:20px; color:#2DD4BF;" contenteditable="true">[68]%</div>
+                <div style="font-size:11px; color:#94A3B8; margin-top:2px;">Повторная выручка</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted); border-top:1px solid var(--border-subtle); padding-top:10px;">
+          <span contenteditable="true">VetPharma Direct • Автоворонка повторных продаж и LTV</span>
+          <span class="mono">СЛАЙД 05 / 05</span>
+        </div>
+      </section>
+    </div>
+  </div>
   <style>
-    /* Controls & Speaker Notes Drawer */
-    .deck-toolbar {
+    .deck-dock {
       position: fixed;
-      bottom: 18px;
+      bottom: 16px;
       z-index: 50;
       display: flex;
       align-items: center;
-      gap: 10px;
-      background: rgba(15, 23, 42, 0.92);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      padding: 8px 16px;
+      gap: 8px;
+      background: rgba(10, 16, 30, 0.92);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      padding: 7px 14px;
       border-radius: 999px;
       color: #F8FAFC;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.45);
     }
-    .toolbar-btn {
-      background: rgba(255,255,255,0.08);
+    .dock-btn {
+      background: rgba(255,255,255,0.07);
       border: 1px solid rgba(255,255,255,0.12);
       color: #F8FAFC;
       padding: 6px 12px;
       border-radius: 999px;
       font-family: 'Manrope', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 12.5px;
+      font-weight: 700;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.15s ease;
+      transition: all 0.18s ease;
     }
-    .toolbar-btn:hover { background: var(--teal-600); border-color: var(--teal-400); }
-    .toolbar-btn.active-toggle { background: var(--blue-600); border-color: #60A5FA; }
-    .slide-dots { display: flex; gap: 6px; margin: 0 8px; }
-    .dot {
-      width: 26px;
-      height: 6px;
-      border-radius: 99px;
-      background: rgba(148, 163, 184, 0.35);
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .dot.active { background: var(--teal-400); width: 38px; }
-    .speaker-drawer {
+    .dock-btn:hover { background: #0D9488; border-color: #2DD4BF; }
+    .dock-btn.active { background: #0284C7; border-color: #38BDF8; }
+    .speaker-box {
       position: fixed;
-      bottom: 72px;
-      width: min(920px, 92vw);
-      background: rgba(15, 23, 42, 0.96);
-      border: 1px solid rgba(45, 212, 191, 0.4);
-      border-radius: 12px;
-      padding: 16px 22px;
+      bottom: 68px;
+      width: min(880px, 92vw);
+      background: rgba(10, 16, 30, 0.96);
+      border: 1px solid rgba(45, 212, 191, 0.45);
+      border-radius: 14px;
+      padding: 14px 20px;
       color: #F8FAFC;
       z-index: 49;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+      box-shadow: 0 18px 45px rgba(0,0,0,0.55);
       display: none;
     }
-    .speaker-drawer.open { display: block; }
-    .icon-box {
-      width: 42px;
-      height: 42px;
-      border-radius: 10px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
-    }
-    .icon-teal { background: rgba(13, 148, 136, 0.12); color: var(--teal-600); }
-    .slide-dark .icon-teal { background: rgba(45, 212, 191, 0.15); color: var(--teal-400); }
-    .icon-blue { background: rgba(37, 99, 235, 0.12); color: var(--blue-600); }
-    .slide-dark .icon-blue { background: rgba(59, 130, 246, 0.2); color: #60A5FA; }
-    .step-arrow {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--teal-600);
-      font-size: 18px;
-    }
+    .speaker-box.open { display: block; }
     @media print {
-      body { height: auto; width: auto; overflow: visible; background: #fff; display: block; }
-      .stage-viewport { transform: none !important; width: 1280px; height: auto; box-shadow: none; }
-      .slide { position: relative; opacity: 1 !important; pointer-events: auto !important; transform: none !important; page-break-after: always; }
-      .deck-toolbar, .speaker-drawer { display: none !important; }
+      body { height: auto; width: auto; overflow: visible; background: #060B16; display: block; }
+      .stage-viewport { transform: none !important; width: 1280px; height: auto; overflow: visible; }
+      .slides-area { overflow: visible; height: auto; }
+      .slide { position: relative; height: 720px; opacity: 1 !important; pointer-events: auto !important; transform: none !important; page-break-after: always; }
+      .slide .anim { opacity: 1 !important; transform: none !important; }
+      .deck-dock, .speaker-box { display: none !important; }
     }
   </style>
 
-  <div class="stage-viewport" id="stage">
-    <!-- SLIDE 1: TITLE -->
-    <section class="slide slide-dark active" data-slide="0" data-notes="Добрый день! Представляю модель специализированного и юридически чистого канала сбыта дефицитных ветеринарных препаратов через экосистему Telegram. Мы объединяем информационную витрину, автоматизированного бота-консультанта и партнерскую логистику, обеспечивая прозрачность каждой партии и высокий LTV за счет регулярных покупок.">
-      <div class="slide-top">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div class="icon-box icon-teal"><i class="fa-solid fa-shield-dog"></i></div>
-          <div>
-            <div class="mono" style="font-size:14px; font-weight:700; color:var(--teal-400);" contenteditable="true">VETPHARMA DIRECT // TELEGRAM ECOSYSTEM</div>
-            <div style="font-size:12px; color:var(--slate-400);" contenteditable="true">Коммерческая презентация модели дистрибуции и воронки продаж</div>
-          </div>
-        </div>
-        <span class="badge badge-teal" contenteditable="true"><i class="fa-solid fa-scale-balanced"></i> Legal &amp; Compliant B2C / B2B2C Model</span>
-      </div>
-
-      <div class="grid-2" style="align-items:center; gap:40px; my:auto;">
-        <div>
-          <div class="badge badge-blue" style="margin-bottom:16px;" contenteditable="true">
-            <i class="fa-brands fa-telegram"></i> Специализированный канал сбыта
-          </div>
-          <h1 style="font-size:44px; font-weight:800; line-height:1.12; letter-spacing:-0.02em; margin-bottom:20px;" contenteditable="true">
-            Экосистема продаж дефицитных ветпрепаратов в <span style="color:var(--teal-400);">Telegram</span>
-          </h1>
-          <p style="font-size:17px; line-height:1.55; color:#CBD5E1; margin-bottom:28px;" contenteditable="true">
-            Легитимная информационно-консультационная модель реализации востребованных оригинальных препаратов (Бравекто, Симпарика, Апоквел, Антепсин, Ализин) с прозрачной воронкой, верификацией партий и автоматизацией повторных заказов.
-          </p>
-          <div style="display:flex; gap:14px; flex-wrap:wrap;">
-            <div class="card" style="padding:14px 18px; flex:1; min-width:165px;">
-              <div class="mono" style="font-size:22px; font-weight:700; color:var(--teal-400);" contenteditable="true">100% Traceable</div>
-              <div style="font-size:12px; color:var(--slate-400); margin-top:4px;" contenteditable="true">Фото/видео батч-кодов и серий до отправки</div>
-            </div>
-            <div class="card" style="padding:14px 18px; flex:1; min-width:165px;">
-              <div class="mono" style="font-size:22px; font-weight:700; color:#60A5FA;" contenteditable="true">0% Комиссий МП</div>
-              <div style="font-size:12px; color:var(--slate-400); margin-top:4px;" contenteditable="true">Прямой доступ к базе клиентов без блокировок</div>
-            </div>
-            <div class="card" style="padding:14px 18px; flex:1; min-width:165px;">
-              <div class="mono" style="font-size:22px; font-weight:700; color:var(--teal-400);" contenteditable="true">x3.5 LTV</div>
-              <div style="font-size:12px; color:var(--slate-400); margin-top:4px;" contenteditable="true">Авто-напоминания бота по циклу приема</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right Visual Mockup: Telegram Ecosystem Card -->
-        <div class="card" style="padding:26px; background:linear-gradient(160deg, rgba(30,41,59,0.95), rgba(15,23,42,0.95)); border-color:rgba(45,212,191,0.3);">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
-            <div style="display:flex; align-items:center; gap:10px;">
-              <i class="fa-brands fa-telegram" style="font-size:26px; color:#38BDF8;"></i>
-              <div>
-                <div style="font-weight:700; font-size:15px;" contenteditable="true">@VetPharma_Direct_Bot</div>
-                <div style="font-size:12px; color:var(--teal-400);" contenteditable="true">● Информационный каталог и бронь</div>
-              </div>
-            </div>
-            <span class="kpi-pill" contenteditable="true">BATCH VERIFIED</span>
-          </div>
-
-          <div style="display:flex; flex-direction:column; gap:12px;">
-            <div style="background:rgba(15,23,42,0.75); border:1px solid rgba(148,163,184,0.2); border-radius:10px; padding:14px;">
-              <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:700; margin-bottom:6px;">
-                <span contenteditable="true">Флагманская матрица спроса</span>
-                <span class="mono" style="color:var(--teal-400);" contenteditable="true">TOP-5 SKU</span>
-              </div>
-              <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
-                <span class="badge badge-teal" contenteditable="true">Бравекто (Bravecto)</span>
-                <span class="badge badge-teal" contenteditable="true">Симпарика (Simparica)</span>
-                <span class="badge badge-blue" contenteditable="true">Апоквел (Apoquel)</span>
-                <span class="badge badge-blue" contenteditable="true">Антепсин</span>
-                <span class="badge badge-blue" contenteditable="true">Ализин</span>
-              </div>
-            </div>
-
-            <div style="background:rgba(13,148,136,0.12); border:1px solid rgba(45,212,191,0.3); border-radius:10px; padding:14px;">
-              <div style="font-size:12px; color:var(--teal-400); font-weight:700; text-transform:uppercase; margin-bottom:6px;" contenteditable="true">
-                <i class="fa-solid fa-file-shield"></i> Юридическая чистота конструкции
-              </div>
-              <p style="font-size:13px; color:#E2E8F0; line-height:1.45;" contenteditable="true">
-                Telegram выступает как экспертное медиа и сервис информационного бронирования. Реализация и выдача осуществляются в рамках партнерской лицензируемой инфраструктуры и курьерского поручения.
-              </p>
-            </div>
-
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-              <div style="background:rgba(255,255,255,0.04); border-radius:8px; padding:10px 12px;">
-                <div style="font-size:11px; color:var(--slate-400);" contenteditable="true">Целевая аудитория</div>
-                <div style="font-size:13px; font-weight:700; margin-top:2px;" contenteditable="true">Владельцы Ср+ / Заводчики</div>
-              </div>
-              <div style="background:rgba(255,255,255,0.04); border-radius:8px; padding:10px 12px;">
-                <div style="font-size:11px; color:var(--slate-400);" contenteditable="true">География отгрузки</div>
-                <div style="font-size:13px; font-weight:700; margin-top:2px;" contenteditable="true">РФ — день в день со склада</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="slide-footer">
-        <span contenteditable="true">VetPharma Direct — Презентация для стратегического партнера / поставщика / инвестора</span>
-        <span class="mono" contenteditable="true">СЛАЙД 01 / 05 • Кликните на любой текст для редактирования</span>
-      </div>
-    </section>
-    <!-- SLIDE 2: COMPLIANCE & SAFETY -->
-    <section class="slide slide-light" data-slide="1" data-notes="Ключевой вопрос любого крупного партнера — как выстроена работа в правовом поле. Мы не позиционируем канал как стихийную доску объявлений. Telegram работает как экспертное СМИ и витрина предзаказа/бронирования, а проведение сделок и логистика опираются на прозрачную документацию, проверку серий и агентскую модель доставки.">
-      <div class="slide-top">
-        <div>
-          <span class="badge badge-teal" contenteditable="true">01 // Юридическая модель и безопасность</span>
-          <h2 class="slide-title" style="margin-top:6px;" contenteditable="true">Легитимная механика сбыта и контроль подлинности</h2>
-          <p class="slide-subtitle" contenteditable="true">Разделение информационной витрины в Telegram и операционного контура исполнения заказа без нарушения законодательства</p>
-        </div>
-        <span class="kpi-pill" contenteditable="true">COMPLIANCE &amp; TRACEABILITY</span>
-      </div>
-
-      <div class="grid-3" style="margin:auto 0;">
-        <div class="card" style="border-top:4px solid var(--teal-600);">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-            <div class="icon-box icon-teal"><i class="fa-solid fa-book-medical"></i></div>
-            <span class="mono" style="font-size:12px; color:var(--teal-600); font-weight:700;" contenteditable="true">КОНТУР 01</span>
-          </div>
-          <h3 style="font-size:18px; font-weight:800; margin-bottom:10px;" contenteditable="true">Информационно-консультационная модель</h3>
-          <p style="font-size:13.5px; color:#475569; line-height:1.5; margin-bottom:14px;" contenteditable="true">
-            Telegram-канал выступает как экспертный справочник и комьюнити владельцев животных. Публикации носят обзорно-информационный характер: разбор оригинальной маркировки, сроков годности и таблиц весовых дозировок.
-          </p>
-          <div style="background:var(--bg-light); padding:10px 12px; border-radius:8px; font-size:12.5px; font-weight:600; color:var(--slate-800);" contenteditable="true">
-            ✓ Отсутствие агрессивных рекламных формулировок и прямых нарушений ФЗ «О рекламе»
-          </div>
-        </div>
-
-        <div class="card" style="border-top:4px solid var(--blue-600);">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-            <div class="icon-box icon-blue"><i class="fa-solid fa-barcode"></i></div>
-            <span class="mono" style="font-size:12px; color:var(--blue-600); font-weight:700;" contenteditable="true">КОНТУР 02</span>
-          </div>
-          <h3 style="font-size:18px; font-weight:800; margin-bottom:10px;" contenteditable="true">Публичная верификация каждой партии</h3>
-          <p style="font-size:13.5px; color:#475569; line-height:1.5; margin-bottom:14px;" contenteditable="true">
-            Снятие главного страха клиента перед маркетплейсами: открытая демонстрация заводских батч-кодов, голограмм, целостности блистеров и соблюдения температурного режима хранения на складе.
-          </p>
-          <div style="background:var(--bg-light); padding:10px 12px; border-radius:8px; font-size:12.5px; font-weight:600; color:var(--slate-800);" contenteditable="true">
-            ✓ Индивидуальное фото упаковки с номером серии перед отправкой каждому покупателю
-          </div>
-        </div>
-
-        <div class="card" style="border-top:4px solid var(--teal-600);">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-            <div class="icon-box icon-teal"><i class="fa-solid fa-truck-fast"></i></div>
-            <span class="mono" style="font-size:12px; color:var(--teal-600); font-weight:700;" contenteditable="true">КОНТУР 03</span>
-          </div>
-          <h3 style="font-size:18px; font-weight:800; margin-bottom:10px;" contenteditable="true">Партнерский контур бронирования и доставки</h3>
-          <p style="font-size:13.5px; color:#475569; line-height:1.5; margin-bottom:14px;" contenteditable="true">
-            Бот оформляет заявку на бронирование позиции и курьерское поручение через партнерскую логистическую инфраструктуру (СДЭК / Боксберри / курьерская служба) с прозрачным трекингом.
-          </p>
-          <div style="background:var(--bg-light); padding:10px 12px; border-radius:8px; font-size:12.5px; font-weight:600; color:var(--slate-800);" contenteditable="true">
-            ✓ Юридически корректная схема агентского выкупа и доставки по поручению клиента
-          </div>
-        </div>
-      </div>
-
-      <div class="card" style="display:flex; align-items:center; justify-content:space-between; background:var(--slate-900); color:#fff; padding:16px 24px;">
-        <div style="display:flex; align-items:center; gap:14px;">
-          <i class="fa-solid fa-circle-check" style="color:var(--teal-400); font-size:22px;"></i>
-          <div style="font-size:14px;" contenteditable="true">
-            <strong>Почему Telegram выигрывает у классических маркетплейсов:</strong> отсутствие 25–30% комиссий, защита от внезапных блокировок карточек и 100% владение клиентской базой.
-          </div>
-        </div>
-        <span class="badge badge-teal" contenteditable="true">Zero Marketplace Risk</span>
-      </div>
-
-      <div class="slide-footer">
-        <span contenteditable="true">VetPharma Direct — Безопасность и соответствие требованиям</span>
-        <span class="mono" contenteditable="true">СЛАЙД 02 / 05</span>
-      </div>
-    </section>
-
-    <!-- SLIDE 3: SALES FUNNEL ARCHITECTURE -->
-    <section class="slide slide-light" data-slide="2" data-notes="Посмотрите на архитектуру воронки продаж. Клиент проходит 4 прозрачных шага без трения: от экспертного поста в канале до автоматического подбора дозировки в боте, быстрой оплаты и получения трек-номера в тот же день.">
-      <div class="slide-top">
-        <div>
-          <span class="badge badge-blue" contenteditable="true">02 // Архитектура воронки продаж</span>
-          <h2 class="slide-title" style="margin-top:6px;" contenteditable="true">Путь клиента: от первого касания до отгрузки за 5 минут</h2>
-          <p class="slide-subtitle" contenteditable="true">Бесшовная связка «Экспертный Telegram-канал → Бот-каталог с расчетом веса → Верификация и доставка»</p>
-        </div>
-        <span class="kpi-pill" contenteditable="true">CONVERSION PIPELINE</span>
-      </div>
-
-      <div class="grid-4" style="margin:auto 0;">
-        <div class="card" style="position:relative;">
-          <div class="mono" style="font-size:12px; color:var(--blue-600); font-weight:700; margin-bottom:8px;" contenteditable="true">ШАГ 01 // ДОВЕРИЕ</div>
-          <h3 style="font-size:17px; font-weight:800; margin-bottom:8px;" contenteditable="true">Экспертный ТГ-канал</h3>
-          <p style="font-size:13px; color:#475569; line-height:1.45; margin-bottom:12px;" contenteditable="true">
-            Подписчик попадает в канал через посев или поиск, видит видеообзор свежей партии (Бравекто / Симпарика / Апоквел), отзывы реальных заводчиков и разбор защиты от подделок.
-          </p>
-          <div class="kpi-pill" style="display:inline-block;" contenteditable="true">CR в бота: [35–45]%</div>
-        </div>
-
-        <div class="card" style="position:relative;">
-          <div class="mono" style="font-size:12px; color:var(--teal-600); font-weight:700; margin-bottom:8px;" contenteditable="true">ШАГ 02 // ПОДБОР</div>
-          <h3 style="font-size:17px; font-weight:800; margin-bottom:8px;" contenteditable="true">Квиз-бот и каталог</h3>
-          <p style="font-size:13px; color:#475569; line-height:1.45; margin-bottom:12px;" contenteditable="true">
-            В 2 клика клиент указывает породу и вес питомца (например, 10–20 кг или 20–40 кг). Бот автоматически выдает нужную дозировку, актуальное наличие и срок годности партии.
-          </p>
-          <div class="kpi-pill" style="display:inline-block;" contenteditable="true">CR в заявку: [25–35]%</div>
-        </div>
-
-        <div class="card" style="position:relative;">
-          <div class="mono" style="font-size:12px; color:var(--blue-600); font-weight:700; margin-bottom:8px;" contenteditable="true">ШАГ 03 // БРОНЬ</div>
-          <h3 style="font-size:17px; font-weight:800; margin-bottom:8px;" contenteditable="true">Подтверждение и оплата</h3>
-          <p style="font-size:13px; color:#475569; line-height:1.45; margin-bottom:12px;" contenteditable="true">
-            Менеджер или бот отправляет фото конкретной упаковки с батч-кодом под бронь клиента, помогает при необходимости рассчитать курс терапии и принимает оплату.
-          </p>
-          <div class="kpi-pill" style="display:inline-block;" contenteditable="true">CR в оплату: [65–75]%</div>
-        </div>
-
-        <div class="card" style="position:relative;">
-          <div class="mono" style="font-size:12px; color:var(--teal-600); font-weight:700; margin-bottom:8px;" contenteditable="true">ШАГ 04 // ЛОГИСТИКА</div>
-          <h3 style="font-size:17px; font-weight:800; margin-bottom:8px;" contenteditable="true">Отправка день в день</h3>
-          <p style="font-size:13px; color:#475569; line-height:1.45; margin-bottom:12px;" contenteditable="true">
-            Отгрузка с собственного склада в день заказа. Бот автоматически присылает трек-номер СДЭК/курьера и ставит клиента в таймер напоминания о следующей покупке.
-          </p>
-          <div class="kpi-pill" style="display:inline-block;" contenteditable="true">NPS: [90]+ баллов</div>
-        </div>
-      </div>
-
-      <div class="grid-2" style="gap:20px;">
-        <div class="card" style="padding:16px 20px; display:flex; align-items:center; gap:16px;">
-          <div class="icon-box icon-teal"><i class="fa-solid fa-boxes-stacked"></i></div>
-          <div>
-            <div style="font-weight:800; font-size:14px;" contenteditable="true">Локомотивы входного трафика (Масс-премиум)</div>
-            <div style="font-size:13px; color:#475569;" contenteditable="true"><strong>Бравекто, Симпарика</strong> — высокий сезонный и регулярный спрос, быстрый вход клиента в доверительную воронку.</div>
-          </div>
-        </div>
-        <div class="card" style="padding:16px 20px; display:flex; align-items:center; gap:16px;">
-          <div class="icon-box icon-blue"><i class="fa-solid fa-prescription-bottle-medical"></i></div>
-          <div>
-            <div style="font-weight:800; font-size:14px;" contenteditable="true">Высокомаржинальная терапия и B2B-спецсегмент</div>
-            <div style="font-size:13px; color:#475569;" contenteditable="true"><strong>Апоквел, Антепсин, Ализин</strong> — круглогодичный неэластичный спрос со стороны владельцев-аллергиков, заводчиков и ветврачей.</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="slide-footer">
-        <span contenteditable="true">VetPharma Direct — Воронка продаж и продуктовая матрица</span>
-        <span class="mono" contenteditable="true">СЛАЙД 03 / 05</span>
-      </div>
-    </section>
-    <!-- SLIDE 4: ACQUISITION STRATEGY -->
-    <section class="slide slide-light" data-slide="3" data-notes="Откуда мы берем целевых платежеспособных клиентов? Мы используем 4 проверенных источника: точечные посевы в породных Telegram-чатах, партнерскую сеть заводчиков и грумеров с агентским вознаграждением, перехват горячего спроса в Яндекс.Директ на бота и экспертные короткие видео.">
-      <div class="slide-top">
-        <div>
-          <span class="badge badge-teal" contenteditable="true">03 // Привлечение клиентов (Go-To-Market)</span>
-          <h2 class="slide-title" style="margin-top:6px;" contenteditable="true">Диверсифицированная система генерации целевого трафика</h2>
-          <p class="slide-subtitle" contenteditable="true">4 независимых канала привлечения платежеспособной аудитории (B2C владельцы породистых животных + B2B заводчики)</p>
-        </div>
-        <span class="kpi-pill" contenteditable="true">CAC ОКУПАЕТСЯ С 1 ЗАКАЗА</span>
-      </div>
-
-      <div class="grid-2" style="margin:auto 0; gap:20px;">
-        <div class="card" style="display:flex; gap:16px; align-items:flex-start;">
-          <div class="icon-box icon-teal"><i class="fa-brands fa-telegram"></i></div>
-          <div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <h3 style="font-size:17px; font-weight:800;" contenteditable="true">1. Посевы в породных ТГ-чатах и каналах</h3>
-              <span class="kpi-pill" contenteditable="true">Доля трафика: 35%</span>
-            </div>
-            <p style="font-size:13.5px; color:#475569; line-height:1.48;" contenteditable="true">
-              Нативные интеграции в узкопрофильных сообществах владельцев конкретных пород (корги, французские бульдоги, терьеры, лабрадоры) и авторских блогах доказательных ветеринаров.
-            </p>
-          </div>
-        </div>
-
-        <div class="card" style="display:flex; gap:16px; align-items:flex-start;">
-          <div class="icon-box icon-blue"><i class="fa-solid fa-handshake-angle"></i></div>
-          <div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <h3 style="font-size:17px; font-weight:800;" contenteditable="true">2. Партнерская сеть B2B2C (Врачи и заводчики)</h3>
-              <span class="kpi-pill" contenteditable="true">Доля трафика: 30%</span>
-            </div>
-            <p style="font-size:13.5px; color:#475569; line-height:1.48;" contenteditable="true">
-              Реферальная программа с персональными промокодами в боте для частных ветврачей, питомников, кинологов и грумеров. Агентская выплата [5–10]% или оптовая скидка за рекомендацию.
-            </p>
-          </div>
-        </div>
-
-        <div class="card" style="display:flex; gap:16px; align-items:flex-start;">
-          <div class="icon-box icon-blue"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
-          <div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <h3 style="font-size:17px; font-weight:800;" contenteditable="true">3. Перехват горячего поиска (Яндекс.Директ)</h3>
-              <span class="kpi-pill" contenteditable="true">Доля трафика: 20%</span>
-            </div>
-            <p style="font-size:13.5px; color:#475569; line-height:1.48;" contenteditable="true">
-              Точечный сбор транзакционных запросов по названиям и дозировкам с посадкой на промежуточный прелендинг-квиз «Проверить наличие и серию в Telegram-боте».
-            </p>
-          </div>
-        </div>
-
-        <div class="card" style="display:flex; gap:16px; align-items:flex-start;">
-          <div class="icon-box icon-teal"><i class="fa-solid fa-video"></i></div>
-          <div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <h3 style="font-size:17px; font-weight:800;" contenteditable="true">4. Экспертный Short-Video контент</h3>
-              <span class="kpi-pill" contenteditable="true">Доля трафика: 15%</span>
-            </div>
-            <p style="font-size:13.5px; color:#475569; line-height:1.48;" contenteditable="true">
-              Короткие ролики (Reels / Shorts / ВК Клипы) с наглядным сравнением оригинальной упаковки и подделки с маркетплейса. Формируют вирусный органический охват и переход в канал.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="card" style="background:var(--slate-900); color:#fff; padding:16px 24px; display:flex; justify-content:space-between; align-items:center;">
-        <div style="font-size:14px;" contenteditable="true">
-          <strong>Целевая экономика привлечения:</strong> Расчетный CAC платящего клиента <span class="mono" style="color:var(--teal-400);">[600–950] ₽</span> при среднем чеке <span class="mono" style="color:var(--teal-400);">[4 500–7 200] ₽</span>
-        </div>
-        <span class="badge badge-teal" contenteditable="true">ROMI 1-го месяца &gt; 180%</span>
-      </div>
-
-      <div class="slide-footer">
-        <span contenteditable="true">VetPharma Direct — Стратегия привлечения новых клиентов</span>
-        <span class="mono" contenteditable="true">СЛАЙД 04 / 05</span>
-      </div>
-    </section>
-
-    <!-- SLIDE 5: RETENTION & LTV -->
-    <section class="slide slide-light" data-slide="4" data-notes="Главная точка генерации чистой прибыли в нашей модели — удержание старых клиентов. Действие таблетки Бравекто или Симпарики строго ограничено по времени, а Апоквел принимается пожизненно. Наш бот сам напоминает владельцу за 7 дней до окончания курса и позволяет повторить заказ в один клик с нулевым CAC.">
-      <div class="slide-top">
-        <div>
-          <span class="badge badge-blue" contenteditable="true">04 // Удержание базы и максимизация LTV</span>
-          <h2 class="slide-title" style="margin-top:6px;" contenteditable="true">Автоворонка повторных покупок с нулевыми затратами на рекламу</h2>
-          <p class="slide-subtitle" contenteditable="true">Биологический цикл приема препаратов превращает разового покупателя в постоянного подписчика на годы</p>
-        </div>
-        <span class="kpi-pill" contenteditable="true">RETENTION &amp; LTV ENGINE</span>
-      </div>
-
-      <div class="grid-2" style="margin:auto 0; gap:24px; align-items:stretch;">
-        <div style="display:flex; flex-direction:column; gap:14px;">
-          <div class="card" style="padding:18px 20px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-              <h3 style="font-size:16px; font-weight:800;" contenteditable="true"><i class="fa-solid fa-bell" style="color:var(--teal-600); margin-right:8px;"></i> Умный триггер-календарь в Telegram-боте</h3>
-              <span class="mono" style="font-size:12px; color:var(--teal-600); font-weight:700;" contenteditable="true">CAC = 0 ₽</span>
-            </div>
-            <p style="font-size:13px; color:#475569; line-height:1.45;" contenteditable="true">
-              При покупке бот фиксирует дату приема и тип препарата. За 7 дней до окончания защиты (через 28 дней для Симпарики / 80 дней для Бравекто / 25 дней для Апоквела) клиенту приходит персональное push-уведомление.
-            </p>
-          </div>
-
-          <div class="card" style="padding:18px 20px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-              <h3 style="font-size:16px; font-weight:800;" contenteditable="true"><i class="fa-solid fa-bolt" style="color:var(--blue-600); margin-right:8px;"></i> Повтор заказа в 1 клик (One-Click Reorder)</h3>
-              <span class="mono" style="font-size:12px; color:var(--blue-600); font-weight:700;" contenteditable="true">CR 60%+</span>
-            </div>
-            <p style="font-size:13px; color:#475569; line-height:1.45;" contenteditable="true">
-              Бот сохраняет породу, вес питомца и любимый пункт выдачи СДЭК. Клиенту не нужно заново заполнять анкету — достаточно нажать кнопку «Повторить прошлый заказ».
-            </p>
-          </div>
-
-          <div class="card" style="padding:18px 20px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-              <h3 style="font-size:16px; font-weight:800;" contenteditable="true"><i class="fa-solid fa-crown" style="color:var(--teal-600); margin-right:8px;"></i> Клубная лояльность и B2B-кабинет заводчика</h3>
-              <span class="mono" style="font-size:12px; color:var(--teal-600); font-weight:700;" contenteditable="true">LTV x3.5</span>
-            </div>
-            <p style="font-size:13px; color:#475569; line-height:1.45;" contenteditable="true">
-              Кэшбэк баллами на следующую упаковку, закрытые предзаказы редких дозировок для участников клуба и мелкий опт (от 5 упаковок) для питомников.
-            </p>
-          </div>
-        </div>
-
-        <!-- Right Visual: Bot Notification & Unit Economics Card -->
-        <div class="card" style="background:var(--slate-900); color:#fff; display:flex; flex-direction:column; justify-content:space-between; padding:24px;">
-          <div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-              <span class="badge badge-teal" contenteditable="true"><i class="fa-brands fa-telegram"></i> Сценарий авто-удержания</span>
-              <span class="mono" style="font-size:12px; color:var(--slate-400);" contenteditable="true">День 78 после покупки</span>
-            </div>
-            <div style="background:rgba(255,255,255,0.06); border-left:3px solid var(--teal-400); border-radius:10px; padding:14px 16px; margin-bottom:18px;">
-              <div style="font-size:12px; color:var(--teal-400); font-weight:700; margin-bottom:4px;" contenteditable="true">VetPharma Care Bot • Авто-напоминание</div>
-              <p style="font-size:13px; color:#E2E8F0; line-height:1.45;" contenteditable="true">
-                «Здравствуйте! Через 6 дней заканчивается срок действия <strong>Бравекто (20–40 кг)</strong> у вашего питомца. В наличии свежая партия со сроком до 08/2027. Отправить на ваш прежний ПВЗ СДЭК со скидкой постоянного клиента 5%?»
-              </p>
-              <div style="display:flex; gap:8px; margin-top:10px;">
-                <span class="badge badge-teal" style="text-transform:none;" contenteditable="true">✅ Да, повторить в 1 клик</span>
-                <span class="badge" style="background:rgba(255,255,255,0.1); color:#fff; text-transform:none;" contenteditable="true">Изменить дозировку</span>
-              </div>
-            </div>
-          </div>
-
-          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px;">
-            <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:10px; text-align:center;">
-              <div class="mono" style="font-size:20px; font-weight:700; color:var(--teal-400);" contenteditable="true">[3–5] раз</div>
-              <div style="font-size:11px; color:var(--slate-400); margin-top:3px;" contenteditable="true">Средняя частота покупок в год</div>
-            </div>
-            <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:10px; text-align:center;">
-              <div class="mono" style="font-size:20px; font-weight:700; color:#60A5FA;" contenteditable="true">[22 000]+ ₽</div>
-              <div style="font-size:11px; color:var(--slate-400); margin-top:3px;" contenteditable="true">Годовой LTV 1 клиента</div>
-            </div>
-            <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:10px; text-align:center;">
-              <div class="mono" style="font-size:20px; font-weight:700; color:var(--teal-400);" contenteditable="true">[68]%</div>
-              <div style="font-size:11px; color:var(--slate-400); margin-top:3px;" contenteditable="true">Доля выручки от повторной базы</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="slide-footer">
-        <span contenteditable="true">VetPharma Direct — Механика удержания и пожизненная ценность клиента (LTV)</span>
-        <span class="mono" contenteditable="true">СЛАЙД 05 / 05</span>
-      </div>
-    </section>
-  </div>
-
-  <!-- Speaker Notes Drawer -->
-  <div class="speaker-drawer" id="notesDrawer">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-      <span class="mono" style="font-size:11px; color:var(--teal-400); text-transform:uppercase; font-weight:700;">
-        <i class="fa-solid fa-microphone-lines"></i> Речь спикера для текущего слайда
-      </span>
-      <span class="mono" id="notesSlideLabel" style="font-size:11px; color:var(--slate-400);">Слайд 1 / 5</span>
+  <div class="speaker-box" id="notesDrawer">
+    <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+      <span class="mono" style="font-size:11px; color:#2DD4BF; font-weight:700;"><i class="fa-solid fa-microphone-lines"></i> РЕЧЬ СПИКЕРА</span>
+      <span class="mono" id="notesSlideLabel" style="font-size:11px; color:#94A3B8;">Слайд 1 / 5</span>
     </div>
-    <p id="notesText" style="font-size:13.5px; line-height:1.5; color:#E2E8F0;" contenteditable="true"></p>
+    <p id="notesText" style="font-size:13px; line-height:1.5; color:#E2E8F0;" contenteditable="true"></p>
   </div>
 
-  <!-- Interactive Toolbar -->
-  <nav class="deck-toolbar">
-    <button class="toolbar-btn" id="prevBtn" title="Предыдущий слайд (←)"><i class="fa-solid fa-chevron-left"></i> Назад</button>
-    <div class="slide-dots" id="dotsContainer"></div>
-    <span class="mono" id="counterLabel" style="font-size:12px; min-width:46px; text-align:center;">01 / 05</span>
-    <button class="toolbar-btn" id="nextBtn" title="Следующий слайд (→)">Вперед <i class="fa-solid fa-chevron-right"></i></button>
-    <button class="toolbar-btn" id="notesBtn" title="Показать/скрыть речь спикера"><i class="fa-solid fa-comment-dots"></i> Речь спикера</button>
-    <button class="toolbar-btn" onclick="window.print()" title="Сохранить в PDF / Печать"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+  <nav class="deck-dock">
+    <button class="dock-btn" id="prevBtn"><i class="fa-solid fa-arrow-left"></i> Назад</button>
+    <span class="mono" id="counterLabel" style="font-size:12px; padding:0 8px;">01 / 05</span>
+    <button class="dock-btn" id="nextBtn">Далее <i class="fa-solid fa-arrow-right"></i></button>
+    <button class="dock-btn" id="notesBtn"><i class="fa-solid fa-comment-dots"></i> Спикер</button>
+    <button class="dock-btn" id="themeBtn"><i class="fa-solid fa-sun"></i> Тема</button>
+    <button class="dock-btn" onclick="window.print()"><i class="fa-solid fa-file-pdf"></i> PDF</button>
   </nav>
 
   <script>
     const slides = Array.from(document.querySelectorAll('.slide'));
-    const dotsContainer = document.getElementById('dotsContainer');
+    const tabs = Array.from(document.querySelectorAll('.chapter-tab'));
+    const topProgress = document.getElementById('topProgress');
     const counterLabel = document.getElementById('counterLabel');
     const notesDrawer = document.getElementById('notesDrawer');
     const notesText = document.getElementById('notesText');
     const notesSlideLabel = document.getElementById('notesSlideLabel');
     const notesBtn = document.getElementById('notesBtn');
+    const themeBtn = document.getElementById('themeBtn');
     const stage = document.getElementById('stage');
     let current = 0;
-
-    slides.forEach((_, idx) => {
-      const dot = document.createElement('div');
-      dot.className = 'dot' + (idx === 0 ? ' active' : '');
-      dot.addEventListener('click', () => goToSlide(idx));
-      dotsContainer.appendChild(dot);
-    });
 
     function goToSlide(index) {
       current = (index + slides.length) % slides.length;
       slides.forEach((s, i) => s.classList.toggle('active', i === current));
-      Array.from(dotsContainer.children).forEach((d, i) => d.classList.toggle('active', i === current));
+      tabs.forEach((t, i) => t.classList.toggle('active', i === current));
+      topProgress.style.width = (((current + 1) / slides.length) * 100) + '%';
       counterLabel.textContent = String(current + 1).padStart(2, '0') + ' / 0' + slides.length;
       notesSlideLabel.textContent = 'Слайд ' + (current + 1) + ' / ' + slides.length;
       notesText.textContent = slides[current].getAttribute('data-notes') || '';
@@ -701,7 +877,10 @@
     document.getElementById('nextBtn').addEventListener('click', () => goToSlide(current + 1));
     notesBtn.addEventListener('click', () => {
       notesDrawer.classList.toggle('open');
-      notesBtn.classList.toggle('active-toggle');
+      notesBtn.classList.toggle('active');
+    });
+    themeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
     });
 
     window.addEventListener('keydown', (e) => {
@@ -711,8 +890,7 @@
     });
 
     function fitStage() {
-      const padX = 48, padY = 96;
-      const scale = Math.min((window.innerWidth - padX) / 1280, (window.innerHeight - padY) / 720, 1.15);
+      const scale = Math.min((window.innerWidth - 40) / 1280, (window.innerHeight - 90) / 720, 1.15);
       stage.style.transform = `scale(${Math.max(scale, 0.35)})`;
     }
     window.addEventListener('resize', fitStage);
